@@ -16,7 +16,7 @@ $ mkdir /mnt/simplefs
 $ ./simplefs /mnt/simplefs
 ```
 
-## Implementing a filesystems
+## Implementing a filesystem
 dfuse provides a high level interface for libfuse. To implement a filesystem, extend the *Operations* class in the *dfuse.fuse* module:
 ```D
 import dfuse.fuse;
@@ -42,7 +42,7 @@ class MyFS : Operations
 }
 ```
 
-A minimal filesystem implements *Operations.getattr*, *Operations.readdir*, *Operations.read*. See [dfuse/fuse.d](https://github.com/facebook/dfuse/blob/master/dfuse/fuse.d) for implementation specific details.
+A minimal filesystem implements `Operations.getattr()`, `Operations.readdir()`, `Operations.read()`. See [dfuse/fuse.d](https://github.com/facebook/dfuse/blob/master/dfuse/fuse.d) for implementation specific details.
 
 To mount a filesystem use a Fuse object and call mount:
 ```D
@@ -55,6 +55,8 @@ int main(string[] args)
     fs.mount(new MyFS(), "/mnt", ["allow_other"]);
 }
 ```
+
+Error conditions are handled by throwin a *FuseException* with the appropriate error number. See `man 3 errno` for more information about errno.
 
 ## Requirements
 dfuse requires:
