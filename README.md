@@ -95,6 +95,9 @@ Phobos in version 2.066:
 $ make dfuse ENABLE_64BIT=1
 ```
 
+### Dub
+dfuse comes with experimental support for [dub](http://code.dlang.org/), a package manager for D. See the dub documentation how to build and use dub.
+
 ## Installing dfuse
 At the moment the dfuse makefile doesn't support an install target. It is
 recommended to just include the library in a project at this point.
@@ -112,6 +115,11 @@ layer.
 The user facing interface is the *Operations* class in fs/fuse.d. It provides
 default implementations for all handlers and every method can be invidually
 overwritten to provide an interface.
+
+## Issues and Bugs
+If you encounter issues or bugs with dfuse, please file an issue on [github](https://github.com/facebook/dfuse/issues). Please ensure that you maintain a constructive feedback atmosphere and if possible attach a reproduction step. If you have any questions, feel free to write to the D mailinglist or ask in IRC.
+
+Pull requests are highly appreciated!
 
 ## Join the dfuse community
 * Website: https://github.com/facebook/dfuse/wiki
