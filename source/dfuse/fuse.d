@@ -177,7 +177,7 @@ extern(System)
     {
         attach();
         auto t = cast(Operations*) fuse_get_context().private_data;
-        (*t).init();
+        (*t).initialize();
         return t;
     }
 
@@ -211,7 +211,7 @@ export class Operations
     /**
      * Runs on filesystem creation
      */
-    void init()
+    void initialize()
     {
     }
 
