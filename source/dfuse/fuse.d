@@ -49,7 +49,7 @@ private void attach()
  */
 template call(alias fn)
 {
-    private auto call(string fname = __FUNCTION__, T...)(T args)
+    private auto call(T...)(T args)
     {
         attach();
         auto t = cast(Operations*) fuse_get_context().private_data;
