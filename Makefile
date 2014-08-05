@@ -77,6 +77,6 @@ dfuse: $(artifact)
 clean:
 	@(rm simplefs 2>/dev/null || exit 0)
 	@(rm -r $(artifact) || exit 0)
-	@(rmdir -p build/ || exit 0)
+	@(rm -rf build/ || exit 0)
 
 .PHONY: dfuse all clean examples
