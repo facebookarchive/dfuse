@@ -1,4 +1,4 @@
-# dfuse version 0.3.0
+# dfuse
 *dfuse* is a [D language binding](http://dlang.org) for the high level
 [fuse](http://fuse.sourceforge.net) library. It allows to write a fuse
 filesystem for Linux or Mac OS (using [osxfuse](http://osxfuse.github.io)) in D.

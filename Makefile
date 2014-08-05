@@ -6,8 +6,8 @@
 # LICENSE file in the root directory of this source tree. An additional grant
 # of patent rights can be found in the PATENTS file in the same directory.
 #
-VERSION=0.3.0
-INTERNAL_VERSION=0003
+VERSION=0.4.0-dev
+INTERNAL_VERSION=0004
 
 product=libdfuse-$(VERSION)
 
