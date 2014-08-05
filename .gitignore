@@ -1,6 +1,7 @@
 *.o
 *.so
 *.dylib
+*.a
 simplefs
 *.swp
 *~
