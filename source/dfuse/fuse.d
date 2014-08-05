@@ -47,27 +47,24 @@ private void attach()
  * The templates passes the Operations object to the lambda as the first
  * arguemnt.
  */
-template call(alias fn)
+private auto call(alias fn)()
 {
-    private auto call(T...)(T args)
+    attach();
+    auto t = cast(Operations*) fuse_get_context().private_data;
+    try
     {
-        attach();
-        auto t = cast(Operations*) fuse_get_context().private_data;
-        try
-        {
-            return fn(*t, args);
-        }
-        catch (FuseException fe)
-        {
-            /* errno is used to indicate an error to libfuse */
-            errno.errno = fe.errno;
-            return -fe.errno;
-        }
-        catch (Exception e)
-        {
-            (*t).exception(e);
-            return -errno.EIO;
-        }
+        return fn(*t);
+    }
+    catch (FuseException fe)
+    {
+        /* errno is used to indicate an error to libfuse */
+        errno.errno = fe.errno;
+        return -fe.errno;
+    }
+    catch (Exception e)
+    {
+        (*t).exception(e);
+        return -errno.EIO;
     }
 }
 
@@ -82,44 +79,44 @@ extern(System)
     private int dfuse_access(const char* path, int mode)
     {
         return call!(
-            (Operations t, const char* path, int mode)
+            (Operations t)
             {
                 if(t.access(path[0..path.strlen], mode))
                 {
                     return 0;
                 }
                 return -1;
-            })(path, mode);
+            })();
     }
 
     private int dfuse_getattr(const char*  path, stat_t* st)
     {
         return call!(
-            (Operations t, const char* path, stat_t* st)
+            (Operations t)
             {
                 t.getattr(path[0..path.strlen], *st);
                 return 0;
-            })(path, st);
+            })();
     }
 
     private int dfuse_readdir(const char* path, void* buf,
             fuse_fill_dir_t filler, off_t offset, fuse_file_info* fi)
     {
         return call!(
-            (Operations t, const char* path, void* buf, fuse_fill_dir_t filler)
+            (Operations t)
             {
                 foreach(file; t.readdir(path[0..path.strlen]))
                 {
                     filler(buf, cast(char*) toStringz(file), null, 0);
                 }
                 return 0;
-            })(path, buf, filler);
+            })();
     }
 
     private int dfuse_readlink(const char* path, char* buf, size_t size)
     {
         return call!(
-            (Operations t, const char* path, char* buf, size_t size)
+            (Operations t)
             {
                 auto length = t.readlink(path[0..path.strlen],
                     (cast(ubyte*)buf)[0..size]);
@@ -128,7 +125,7 @@ extern(System)
                 buf[length] = '\0';
 
                 return 0;
-            })(path, buf, size);
+            })();
     }
 
     private int dfuse_read(const char* path, char* buf, size_t size,
@@ -139,12 +136,12 @@ extern(System)
         static assert(ulong.max >= off_t.max);
 
         return call!(
-            (Operations t, const char* path, char* buf, size_t size, off_t off)
+            (Operations t)
             {
                 auto bbuf = cast(ubyte*) buf;
                 return cast(int) t.read(path[0..path.strlen], bbuf[0..size],
-                    to!ulong(off));
-            })(path, buf, size, offset);
+                    to!ulong(offset));
+            })();
     }
 
     private int dfuse_write(const char* path, char* data, size_t size,
@@ -154,23 +151,23 @@ extern(System)
         static assert(ulong.max >= off_t.max);
 
         return call!(
-            (Operations t, const char* path, char* data, size_t size, off_t off)
+            (Operations t)
             {
                 auto bdata = cast(ubyte*) data;
                 return t.write(path[0..path.strlen], bdata[0..size],
-                    to!ulong(off));
-            })(path, data, size, offset);
+                    to!ulong(offset));
+            })();
     }
 
     private int dfuse_truncate(const char* path, off_t length)
     {
         static assert(ulong.max >= off_t.max);
         return call!(
-            (Operations t, const char* path, off_t length)
+            (Operations t)
             {
                 t.truncate(path[0..path.strlen], to!ulong(length));
                 return 0;
-            })(path, length);
+            })();
     }
 
     private void* dfuse_init(fuse_conn_info* conn)
