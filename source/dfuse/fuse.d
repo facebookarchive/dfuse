@@ -22,6 +22,8 @@ import core.stdc.string;
 
 import c.fuse.fuse;
 
+import core.thread : thread_attachThis, thread_detachThis;
+import core.sys.posix.pthread;
 
 /**
  * libfuse is handling the thread creation and we cannot hook into it. However
@@ -29,13 +31,20 @@ import c.fuse.fuse;
  * we check if the current thread is attached and attach it if necessary.
  */
 private int threadAttached = false;
+private pthread_cleanup cleanup;
+
+extern(C) void detach(void* ptr) nothrow
+{
+    import std.exception;
+    collectException(thread_detachThis());
+}
 
 private void attach()
 {
     if (!threadAttached)
     {
-        import core.thread;
         thread_attachThis();
+        cleanup.push(&detach, cast(void*) null);
         threadAttached = true;
     }
 }
