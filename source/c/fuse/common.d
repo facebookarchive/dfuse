@@ -63,7 +63,7 @@ extern (System) {
         /**
          * For future use.
          */
-        uint reserved[23];
+        uint[23] reserved;
     }
 
     static assert(fuse_file_info.sizeof == 64);
