@@ -42,7 +42,7 @@ class MyFS : Operations
 }
 ```
 
-A minimal filesystem implements `Operations.getattr()`, `Operations.readdir()`, `Operations.read()`. See [dfuse/fuse.d](https://github.com/facebook/dfuse/blob/master/dfuse/fuse.d) for implementation specific details.
+A minimal filesystem implements `Operations.getattr()`, `Operations.readdir()`, `Operations.read()`. See [dfuse/fuse.d](https://github.com/facebook/dfuse/blob/master/source/dfuse/fuse.d) for implementation specific details.
 
 To mount a filesystem use a Fuse object and call mount:
 ```D
