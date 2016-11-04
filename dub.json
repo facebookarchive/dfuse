@@ -9,12 +9,12 @@
     "configurations": [{
         "name": "dfuse",
         "targetType": "library",
-        "platforms": ["osx"],
-        "libs": ["osxfuse_i32"]
+        "platforms": ["linux"],
+        "libs": ["fuse"]
     }, {
         "name": "dfuse",
         "targetType": "library",
-        "platforms": ["linux"],
-        "libs": ["fuse"]
+        "platforms": ["osx"],
+        "libs": ["osxfuse_i32"]
     }]
 }
