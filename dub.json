@@ -7,14 +7,14 @@
     "license": "BSL-1.0",
     "dependencies": {},
     "configurations": [{
-        "name": "dfuse",
-        "targetType": "library",
-        "platforms": ["osx"],
-        "libs": ["osxfuse_i32"]
-    }, {
-        "name": "dfuse",
+        "name": "dfuse-linux",
         "targetType": "library",
         "platforms": ["linux"],
         "libs": ["fuse"]
+    }, {
+        "name": "dfuse-osx",
+        "targetType": "library",
+        "platforms": ["osx"],
+        "libs": ["osxfuse_i32"]
     }]
 }

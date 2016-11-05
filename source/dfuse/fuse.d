@@ -17,8 +17,10 @@ import std.array;
 import std.conv;
 import std.stdio;
 import std.string;
+import std.process;
 import errno = core.stdc.errno;
 import core.stdc.string;
+import core.sys.posix.signal;
 
 import c.fuse.fuse;
 
@@ -320,6 +322,7 @@ private:
     bool foreground;
     bool threaded;
     string fsname;
+    int pid;
 
 public:
     this(string fsname)
@@ -381,6 +384,12 @@ public:
             enforce(length == cargs.length);
         }
 
+        this.pid = thisProcessID();
         fuse_main(length, cast(char**) cargs.ptr, &fops, &ops);
+    }
+
+    void exit()
+    {
+        kill(this.pid, SIGINT);
     }
 }
