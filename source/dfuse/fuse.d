@@ -194,8 +194,29 @@ extern(System)
     private int dfuse_unlink(const char* path)
     {
         return call!(
-            (Operations t){
+            (Operations t)
+            {
                 t.unlink(path[0..path.strlen]);
+                return 0;
+            })();
+    }
+
+    private int dfuse_mkdir(const char * path, mode_t mode)
+    {
+        static assert(uint.max >= mode_t.max);
+        return call!(
+            (Operations t)
+            {
+                t.mkdir(path[0..path.strlen], mode.to!uint);
+                return 0;
+            })();
+    }
+    private int dfuse_rmdir(const char * path)
+    {
+        return call!(
+            (Operations t)
+            {
+                t.rmdir(path[0..path.strlen]);
                 return 0;
             })();
     }
@@ -337,6 +358,16 @@ export class Operations
         throw new FuseException(errno.EOPNOTSUPP);
     }
 
+    void mkdir(const(char)[] path, uint mode)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
+    void rmdir(const(char)[] path)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
     void exception(Exception e)
     {
     }
@@ -401,6 +432,8 @@ public:
         fops.destroy = &dfuse_destroy;
         fops.mknod = &dfuse_mknod;
         fops.unlink = &dfuse_unlink;
+        fops.mkdir = &dfuse_mkdir;
+        fops.rmdir = &dfuse_rmdir;
 
         /* Create c-style arguments from a string[] array. */
         auto cargs = array(map!(a => toStringz(a))(args));
