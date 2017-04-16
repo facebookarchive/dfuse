@@ -179,6 +179,27 @@ extern(System)
             })();
     }
 
+    private int dfuse_mknod(const char* path, mode_t mod, dev_t dev)
+    {
+        static assert(ulong.max >= dev_t.max);
+        static assert(uint.max >= mode_t.max);
+        return call!(
+            (Operations t)
+            {
+                t.mknod(path[0..path.strlen], mod, dev);
+                return 0;
+            })();
+    }
+
+    private int dfuse_unlink(const char* path)
+    {
+        return call!(
+            (Operations t){
+                t.unlink(path[0..path.strlen]);
+                return 0;
+            })();
+    }
+
     private void* dfuse_init(fuse_conn_info* conn)
     {
         attach();
@@ -306,6 +327,16 @@ export class Operations
         throw new FuseException(errno.EOPNOTSUPP);
     }
 
+    void mknod(const(char)[] path, int mod, ulong dev)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
+    void unlink(const(char)[] path)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
     void exception(Exception e)
     {
     }
@@ -368,6 +399,8 @@ public:
         fops.truncate = &dfuse_truncate;
         fops.readlink = &dfuse_readlink;
         fops.destroy = &dfuse_destroy;
+        fops.mknod = &dfuse_mknod;
+        fops.unlink = &dfuse_unlink;
 
         /* Create c-style arguments from a string[] array. */
         auto cargs = array(map!(a => toStringz(a))(args));
