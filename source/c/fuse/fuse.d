@@ -38,7 +38,7 @@ extern (System)
         int function(const char*) unlink;
         int function(const char*) rmdir;
         int function(const char*, char*) symlink;
-        int function(const char*, char*) rename;
+        int function(const char*, const char*) rename;
         int function(const char*, char*) link;
         int function(const char*, mode_t) chmod;
         int function(const char*, uid_t, gid_t) chown;

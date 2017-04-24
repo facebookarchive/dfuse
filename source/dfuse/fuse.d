@@ -221,6 +221,15 @@ extern(System)
             })();
     }
 
+    private int dfuse_rename(const char* orig, const char* dest) {
+        return call!(
+            (Operations t)
+            {
+                t.rename(orig[0..orig.strlen], dest[0..dest.strlen]);
+                return 0;
+            })();
+    }
+
     private void* dfuse_init(fuse_conn_info* conn)
     {
         attach();
@@ -368,6 +377,11 @@ export class Operations
         throw new FuseException(errno.EOPNOTSUPP);
     }
 
+    void rename(const(char)[] orig, const(char)[] dest)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
     void exception(Exception e)
     {
     }
@@ -434,6 +448,7 @@ public:
         fops.unlink = &dfuse_unlink;
         fops.mkdir = &dfuse_mkdir;
         fops.rmdir = &dfuse_rmdir;
+        fops.rename = &dfuse_rename;
 
         /* Create c-style arguments from a string[] array. */
         auto cargs = array(map!(a => toStringz(a))(args));
