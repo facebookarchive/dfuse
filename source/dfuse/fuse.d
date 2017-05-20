@@ -287,7 +287,7 @@ export class Operations
      * Params:
      *   path = The path to the directory.
      */
-    ulong readlink(const(char)[] path, ubyte[] buf)
+    size_t readlink(const(char)[] path, ubyte[] buf)
     {
         throw new FuseException(errno.EOPNOTSUPP);
     }
